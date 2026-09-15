@@ -1,299 +1,393 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard สุขภาพประจำสัปดาห์</title>
-  <style>
-    body {
-      font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
-      color: #333333;
-      line-height: 1.5;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    h1 {
-      color: #1a365d;
-      font-size: 24px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 10px;
-    }
-    h2 {
-      color: #2b6cb0;
-      font-size: 18px;
-      margin-top: 25px;
-      margin-bottom: 15px;
-    }
-    /* Grid Layout สำหรับ KPI */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-    .kpi-card {
-      background-color: #f7fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-    }
-    .kpi-title {
-      font-size: 13px;
-      color: #4a5568;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-    .kpi-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2d3748;
-    }
-    .kpi-unit {
-      font-size: 12px;
-      color: #718096;
-      font-weight: normal;
-    }
-    /* ตารางข้อมูล */
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 25px;
-      border: 1px solid #e2e8f0;
-    }
-    .data-table th {
-      background-color: #ebf8ff;
-      color: #2b6cb0;
-      font-weight: bold;
-      text-align: left;
-      padding: 12px;
-      border-bottom: 2px solid #cbd5e0;
-    }
-    .data-table td {
-      padding: 12px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .data-table tr:nth-child(even) {
-      background-color: #f7fafc;
-    }
-    /* Visual Progress Bar */
-    .bar-container {
-      background-color: #edf2f7;
-      border-radius: 4px;
-      height: 16px;
-      width: 100%;
-      overflow: hidden;
-      margin-bottom: 4px;
-    }
-    .bar-sleep {
-      background-color: #4c51bf;
-      height: 100%;
-      border-radius: 4px;
-    }
-    .bar-water {
-      background-color: #3182ce;
-      height: 100%;
-      border-radius: 4px;
-    }
-    .val-text {
-      font-size: 11px;
-      color: #4a5568;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard สุขภาพประจำสัปดาห์</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+            line-height: 1.5;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #1a365d;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2b6cb0;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .kpi-title {
+            font-size: 13px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .kpi-unit {
+            font-size: 12px;
+            color: #718096;
+            font-weight: normal;
+        }
+
+        /* Health cards */
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .health-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            background-color: #ffffff;
+        }
+
+        .health-card h3 {
+            margin-top: 0;
+            color: #2b6cb0;
+            font-size: 16px;
+        }
+
+        .health-card p {
+            margin: 8px 0;
+        }
+
+        /* Progress bar */
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #4299e1;
+            border-radius: 10px;
+        }
+
+        /* Status */
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .good {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .normal {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .warning {
+            background: #feebc8;
+            color: #9c4221;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+
+        /* Recommendation */
+        .recommendation {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .recommendation ul {
+            margin-bottom: 0;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .kpi-value {
+                font-size: 21px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-  <h1>Dashboard สุขภาพประจำสัปดาห์ (น้ำหนักตัว 85 กก.)</h1>
+    <div class="container">
 
-  <!-- 1. KPI Cards -->
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-title">วันออกกำลังกาย</div>
-      <div class="kpi-value">5 <span class="kpi-unit">/ 7 วัน</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">เวลารวมออกกำลังกาย</div>
-      <div class="kpi-value">195 <span class="kpi-unit">นาที</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">ชั่วโมงนอนเฉลี่ย</div>
-      <div class="kpi-value">7.3 <span class="kpi-unit">ชม./วัน</span></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-title">ปริมาณน้ำเฉลี่ย</div>
-      <div class="kpi-value">2.1 <span class="kpi-unit">ลิตร/วัน</span></div>
-    </div>
-  </div>
+        <h1>Dashboard สุขภาพประจำสัปดาห์</h1>
 
-  <!-- 2. Daily Log Table -->
-  <h2>รายการกิจกรรมและสุขภาพรายวัน (7–13 ก.ย.)</h2>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>วันที่</th>
-        <th>กิจกรรมออกกำลังกาย</th>
-        <th>ระยะเวลา</th>
-        <th>ระยะเวลานอน</th>
-        <th>ปริมาณน้ำที่ดื่ม</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>7 ก.ย. (จันทร์)</td>
-        <td>วิ่ง</td>
-        <td>30 นาที</td>
-        <td>7.2 ชม.</td>
-        <td>1.8 ลิตร</td>
-      </tr>
-      <tr>
-        <td>8 ก.ย. (อังคาร)</td>
-        <td>ปั่นจักรยาน</td>
-        <td>45 นาที</td>
-        <td>6.5 ชม.</td>
-        <td>1.5 ลิตร</td>
-      </tr>
-      <tr>
-        <td>9 ก.ย. (พุธ)</td>
-        <td>พักผ่อน (Rest Day)</td>
-        <td>-</td>
-        <td>8.0 ชม.</td>
-        <td>2.5 ลิตร</td>
-      </tr>
-      <tr>
-        <td>10 ก.ย. (พฤหัสบดี)</td>
-        <td>วิ่ง</td>
-        <td>30 นาที</td>
-        <td>7.5 ชม.</td>
-        <td>2.2 ลิตร</td>
-      </tr>
-      <tr>
-        <td>11 ก.ย. (ศุกร์)</td>
-        <td>เวทเทรนนิ่ง</td>
-        <td>40 นาที</td>
-        <td>6.8 ชม.</td>
-        <td>2.0 ลิตร</td>
-      </tr>
-      <tr>
-        <td>12 ก.ย. (เสาร์)</td>
-        <td>วิ่ง</td>
-        <td>50 นาที</td>
-        <td>8.2 ชม.</td>
-        <td>2.8 ลิตร</td>
-      </tr>
-      <tr>
-        <td>13 ก.ย. (อาทิตย์)</td>
-        <td>พักผ่อน (Rest Day)</td>
-        <td>-</td>
-        <td>7.0 ชม.</td>
-        <td>2.1 ลิตร</td>
-      </tr>
-    </tbody>
-  </table>
+        <!-- KPI -->
+        <h2>ภาพรวมสุขภาพ</h2>
 
-  <!-- 3. Trend Visual Bars -->
-  <h2>แนวโน้มชั่วโมงการนอนและปริมาณน้ำดื่ม 7 วัน</h2>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th style="width: 15%;">วัน</th>
-        <th style="width: 42.5%;">ชั่วโมงการนอน (เป้าหมาย 7-8 ชม.)</th>
-        <th style="width: 42.5%;">ปริมาณน้ำดื่ม (เป้าหมาย 3.0 ลิตร)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>จันทร์</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 72%;"></div></div>
-          <span class="val-text">7.2 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 60%;"></div></div>
-          <span class="val-text">1.8 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>อังคาร</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 65%;"></div></div>
-          <span class="val-text">6.5 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 50%;"></div></div>
-          <span class="val-text">1.5 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>พุธ</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 80%;"></div></div>
-          <span class="val-text">8.0 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 83%;"></div></div>
-          <span class="val-text">2.5 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>พฤหัสบดี</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 75%;"></div></div>
-          <span class="val-text">7.5 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 73%;"></div></div>
-          <span class="val-text">2.2 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>ศุกร์</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 68%;"></div></div>
-          <span class="val-text">6.8 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 66%;"></div></div>
-          <span class="val-text">2.0 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>เสาร์</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 82%;"></div></div>
-          <span class="val-text">8.2 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 93%;"></div></div>
-          <span class="val-text">2.8 ลิตร</span>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>อาทิตย์</strong></td>
-        <td>
-          <div class="bar-container"><div class="bar-sleep" style="width: 70%;"></div></div>
-          <span class="val-text">7.0 ชม.</span>
-        </td>
-        <td>
-          <div class="bar-container"><div class="bar-water" style="width: 70%;"></div></div>
-          <span class="val-text">2.1 ลิตร</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+        <div class="kpi-grid">
+
+            <div class="kpi-card">
+                <div class="kpi-title">น้ำหนัก</div>
+                <div class="kpi-value">
+                    68 <span class="kpi-unit">kg</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">การนอน</div>
+                <div class="kpi-value">
+                    7.5 <span class="kpi-unit">ชม.</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">การออกกำลังกาย</div>
+                <div class="kpi-value">
+                    3 <span class="kpi-unit">ครั้ง</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">ดื่มน้ำ</div>
+                <div class="kpi-value">
+                    2.1 <span class="kpi-unit">ลิตร/วัน</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Health status -->
+        <h2>สถานะสุขภาพ</h2>
+
+        <div class="health-grid">
+
+            <div class="health-card">
+                <h3>การนอนหลับ</h3>
+
+                <p>
+                    ค่าเฉลี่ย 7.5 ชั่วโมง/วัน
+                </p>
+
+                <span class="status good">
+                    ดี
+                </span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 85%;"></div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <h3>การออกกำลังกาย</h3>
+
+                <p>
+                    ออกกำลังกาย 3 ครั้ง/สัปดาห์
+                </p>
+
+                <span class="status normal">
+                    ปกติ
+                </span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <h3>การดื่มน้ำ</h3>
+
+                <p>
+                    เฉลี่ย 2.1 ลิตร/วัน
+                </p>
+
+                <span class="status good">
+                    ดี
+                </span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 90%;"></div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <h3>อาหาร</h3>
+
+                <p>
+                    รับประทานอาหารครบ 3 มื้อ
+                </p>
+
+                <span class="status normal">
+                    ปกติ
+                </span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 70%;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Weekly record -->
+        <h2>บันทึกประจำสัปดาห์</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>วัน</th>
+                    <th>การนอน</th>
+                    <th>ออกกำลังกาย</th>
+                    <th>ดื่มน้ำ</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>จันทร์</td>
+                    <td>7 ชม.</td>
+                    <td>เดิน 30 นาที</td>
+                    <td>2 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>อังคาร</td>
+                    <td>8 ชม.</td>
+                    <td>วิ่ง 30 นาที</td>
+                    <td>2.2 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>พุธ</td>
+                    <td>7 ชม.</td>
+                    <td>พัก</td>
+                    <td>2 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>พฤหัสบดี</td>
+                    <td>7.5 ชม.</td>
+                    <td>เวทเทรนนิ่ง</td>
+                    <td>2.3 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>ศุกร์</td>
+                    <td>8 ชม.</td>
+                    <td>พัก</td>
+                    <td>2.1 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>เสาร์</td>
+                    <td>7 ชม.</td>
+                    <td>วิ่ง 40 นาที</td>
+                    <td>2.2 ลิตร</td>
+                </tr>
+
+                <tr>
+                    <td>อาทิตย์</td>
+                    <td>8 ชม.</td>
+                    <td>พัก</td>
+                    <td>2 ลิตร</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Recommendation -->
+        <h2>คำแนะนำประจำสัปดาห์</h2>
+
+        <div class="recommendation">
+            <ul>
+                <li>ควรนอนให้ได้ประมาณ 7–9 ชั่วโมงต่อวัน</li>
+                <li>ออกกำลังกายอย่างน้อย 3–5 วันต่อสัปดาห์</li>
+                <li>ดื่มน้ำให้เพียงพอตลอดทั้งวัน</li>
+                <li>รับประทานผักและผลไม้เพิ่มขึ้น</li>
+                <li>ลดอาหารหวาน มัน และเค็ม</li>
+            </ul>
+        </div>
+
+    </div>
 
 </body>
 </html>
-# dashboard-
